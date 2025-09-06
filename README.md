@@ -1,0 +1,1 @@
+This application is created to clarify the basic Health related queries
