@@ -1,8 +1,11 @@
 import streamlit as st
 from google import genai
+import os
+from dotenv import load_dotenv
 
-# Load API key from Render env var (or st.secrets)
-API_KEY = st.secrets.get("GEMINI_API_KEY", "")
+# Load environment variables from .env file
+load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 client = genai.Client(api_key=API_KEY)
 
@@ -32,11 +35,12 @@ if prompt := st.chat_input("Ask a health question..."):
     # Call Gemini directly
     response = client.models.generate_content(
         model="gemini-2.0-flash",
-        contents=[{"role": "system", "content": SYSTEM_PROMPT},
-                  {"role": "user", "content": prompt}],
+        contents=[SYSTEM_PROMPT, prompt],
     )
     reply = response.text + "\n\n---\n*I am not a doctor. Informational only.*"
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
     with st.chat_message("assistant"):
         st.markdown(reply)
+
+#Hey, I am feeling sleepy in day time and not getting sleep until 4am in morning. What's happening? I am a 19 years old boy
